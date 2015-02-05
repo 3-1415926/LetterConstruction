@@ -44,7 +44,7 @@ void HasRadius::DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
       dynamic_cast<const HasRadius*>(next_figure);
   if (next_has_radius) {
     double hypo = next_has_radius->radius + FIGURE_WIDTH + DEFAULT_STEP;
-    double oppo = radius; // FIXME: this is less for GreenArc
+    double oppo = GapSize() / 2;
     double adja = sqrt(hypo * hypo - oppo * oppo);
     *x -= scale * (hypo - adja);
   }
@@ -72,6 +72,13 @@ void Arc::Draw(Cairo::RefPtr<Cairo::Context> cr) const {
             DOT_RADIUS, 0, M_PI * 2);
     cr->stroke();
   }
+}
+
+void GreenArc::DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
+                           const Figure* next_figure,
+                           double scale, double* x, double* y) const {
+  HasRadius::DrawDefault(surface, next_figure, scale, x, y);
+  *x += scale * GREEN_ARC_RADIUS * cos(GREEN_ARC_OPEN_HALF_ANGLE);
 }
 
 void PurpleArc::Draw(Cairo::RefPtr<Cairo::Context> cr) const {

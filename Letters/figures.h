@@ -120,6 +120,7 @@ public:
                    const Figure* next_figure,
                    double scale, double* x, double* y) const override;
 protected:
+  virtual double GapSize() const { return radius * 2; }
   const double radius;
 };
 
@@ -163,6 +164,11 @@ struct GreenArc : public Arc {
           GREEN_ARC_OPEN_HALF_ANGLE,
           M_PI_2,
           M_PI - GREEN_ARC_OPEN_HALF_ANGLE }) { }
+  void DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
+                   const Figure* next_figure,
+                   double scale, double* x, double* y) const override;
+protected:
+  double GapSize() const override { return BLUE_LARGE_STEP; }
 };
 
 struct OrangeArc : public Arc {

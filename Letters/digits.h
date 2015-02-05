@@ -41,7 +41,20 @@ struct Three : public Letter {
   }
 };
 
-struct Four : public Letter { };
+struct Four : public Letter {
+  Four() {
+    AddFigures({
+      new OffsetFigure(new BlueStick(), BLUE_SMALL_STEP, 0, M_PI / 2),
+      new OffsetFigure(new GreenStick(),
+          -BLUE_HALF_LENGTH + GREEN_STEP * cos(green_angle),
+          BLUE_SMALL_STEP - GREEN_STEP * sin(green_angle),
+          -green_angle),
+      new OffsetFigure(new BlueStick(), 0, BLUE_SMALL_STEP, 0),
+    });
+  }
+private:
+  const double green_angle = 3 * M_PI / 8;
+};
 
 struct Five : public Letter {
   Five() {
@@ -54,17 +67,34 @@ struct Five : public Letter {
   }
 };
 
-struct Six : public Letter { };
+struct Six : public Letter {
+  Six() {
+    AddFigures({
+      new OffsetFigure(new GreenStick(),
+          -GREEN_ARC_RADIUS * sin(circ_angle)
+                       + GREEN_STEP * cos(head_angle),
+          GREEN_ARC_RADIUS * (1 - cos(circ_angle))
+                       - GREEN_STEP * sin(head_angle),
+          -head_angle),
+      new OffsetFigure(new GreenArc(), 0, GREEN_ARC_RADIUS, -circ_angle),
+      new OffsetFigure(new GreenArc(), 0, GREEN_ARC_RADIUS, M_PI - circ_angle),
+    });
+  }
+private:
+  const double circ_angle = M_PI / 4;
+  const double head_angle = 5 * M_PI / 16;
+};
 
 struct Seven : public Letter {
   Seven() {
     AddFigures({
       new OffsetFigure(new GreenStick(), 0, -BLUE_HALF_LENGTH * sin(angle), 0),
-      new OffsetFigure(new BlueStick(), 0, 0, -angle),
+      new OffsetFigure(new BlueStick(),
+          GREEN_STEP - BLUE_HALF_LENGTH * cos(angle), 0, -angle),
     });
   }
 private:
-  const double angle = acos(GREEN_STEP / BLUE_HALF_LENGTH);
+  const double angle = acos(5 * GREEN_STEP / BLUE_HALF_LENGTH / 8);
 };
 
 struct Eight : public Letter {
@@ -78,7 +108,23 @@ struct Eight : public Letter {
   }
 };
 
-struct Nine : public Letter { };
+struct Nine : public Letter {
+  Nine() {
+    AddFigures({
+      new OffsetFigure(new GreenArc(), 0, -GREEN_ARC_RADIUS, -circ_angle),
+      new OffsetFigure(new GreenArc(), 0, -GREEN_ARC_RADIUS, M_PI - circ_angle),
+      new OffsetFigure(new GreenStick(),
+          GREEN_ARC_RADIUS * sin(circ_angle)
+                       - GREEN_STEP * cos(head_angle),
+          -GREEN_ARC_RADIUS * (1 - cos(circ_angle))
+                       + GREEN_STEP * sin(head_angle),
+          -head_angle),
+    });
+  }
+private:
+  const double circ_angle = M_PI / 4;
+  const double head_angle = 5 * M_PI / 16;
+};
 
 struct Zero : public Letter {
   Zero() {

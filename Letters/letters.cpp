@@ -19,12 +19,14 @@ void Letter::Draw(Cairo::RefPtr<Cairo::Surface> surface,
   }
 }
 
+double Letter::MeasurePartsWidth(double scale) const {
+  Cairo::RefPtr<Cairo::Surface> dummy_surface;
+  double width = 0, _ = 0;
+  DrawPartsImpl(figures, dummy_surface, scale, &width, &_);
+  return width;
+}
+
 void Letter::DrawParts(Cairo::RefPtr<Cairo::Surface> surface,
                        double scale, double x, double y) const {
-  Cairo::RefPtr<Cairo::Surface> dummy_surface;
-  double temp_x = 0, temp_y = 0;
-  DrawPartsImpl(figures, dummy_surface, scale, &temp_x, &temp_y);
-  x -= temp_x / 2;
-  y -= temp_y / 2;
   DrawPartsImpl(figures, surface, scale, &x, &y);
 }

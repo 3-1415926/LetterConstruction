@@ -17,6 +17,8 @@ public:
   void Draw(Cairo::RefPtr<Cairo::Surface> surface,
             double scale, double x, double y) const;
 
+  double MeasurePartsWidth(double scale) const;
+  
   void DrawParts(Cairo::RefPtr<Cairo::Surface> surface,
                  double scale, double x, double y) const;
 protected:

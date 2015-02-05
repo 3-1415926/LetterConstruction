@@ -13,6 +13,7 @@ int main() {
   const double points_in_inch = 72;
   const double width = 8.5 * points_in_inch;
   const double height = 11 * points_in_inch;
+  const double margin = 0.25 * points_in_inch;
   const double scale = 0.6;
   
   std::vector<Letter*> letters = {
@@ -32,12 +33,18 @@ int main() {
 
   auto letter = letters.begin();
   const int rows = 3;
+  const double max_parts_width = width / 2 - 2 * margin;
   while (letter != letters.end()) {
     for (int i = 0; i < rows && letter != letters.end(); ++i) {
+      double parts_width = (*letter)->MeasurePartsWidth(scale);
+      double extra_offset = parts_width > max_parts_width
+          ? (parts_width - max_parts_width) / 2 : 0;
       (*letter)->Draw(surface, scale,
-          width / 4, height * (i + 0.5) / rows);
+                      width / 4 - extra_offset,
+                      height * (i + 0.5) / rows);
       (*letter)->DrawParts(surface, scale,
-          3 * width / 4, height * (i + 0.5) / rows);
+                           3 * width / 4 - parts_width / 2 - extra_offset,
+                           height * (i + 0.5) / rows);
       if (i > 0) {
         auto cr = Cairo::Context::create(surface);
         cr->set_source_rgb(0.5, 0.5, 0.5);
