@@ -39,11 +39,16 @@ static_assert(BLUE_HALF_LENGTH == ORANGE_STEP * 2,
 class Figure {
 public:
   Figure(Color color) : color(color) { }
+
   virtual ~Figure() { }
 
   void DrawFigure(Cairo::RefPtr<Cairo::Surface> surface,
                   double scale, double x, double y, double angle) const;
-  
+
+  virtual void DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
+                           const Figure* next_figure,
+                           double scale, double* x, double* y) const;
+
 protected:
   virtual void Draw(Cairo::RefPtr<Cairo::Context> cr) const = 0;
   
@@ -52,6 +57,9 @@ protected:
   }
   
   const Color color;
+  double default_angle = 0;
+
+  static constexpr double DEFAULT_STEP = END_RADIUS;
 };
 
 class OffsetFigure {
@@ -59,14 +67,16 @@ public:
   OffsetFigure(Figure* figure, double x, double y, double angle)
   : figure(figure), _x(x), _y(y), _angle(angle) { }
   std::unique_ptr<Figure> figure;
-  const double _x, _y;
-  const double _angle;
 
   void Draw(Cairo::RefPtr<Cairo::Surface> surface,
             double scale, double x, double y, double angle) const {
     figure->DrawFigure(surface, scale, scale * _x + x, scale * _y + y,
                        _angle + angle);
   }
+
+private:
+  const double _x, _y;
+  const double _angle;
 };
 
 class Stick : public Figure {
@@ -74,6 +84,7 @@ public:
   Stick(Color color, double half_length,
         std::initializer_list<double> extra_dots)
   : Figure(color), half_length(half_length) {
+    default_angle = M_PI / 2;
     dots.insert(0);
     dots.insert(-half_length);
     dots.insert(half_length);
@@ -102,17 +113,27 @@ struct OrangeStick : public Stick {
   OrangeStick() : Stick(Color::ORANGE, ORANGE_STEP, { }) { }
 };
 
-struct PurpleDot : public Figure {
-  PurpleDot() : Figure(Color::PURPLE) { }
+class HasRadius : public Figure {
+public:
+  HasRadius(Color color, double radius) : Figure(color), radius(radius) { }
+  void DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
+                   const Figure* next_figure,
+                   double scale, double* x, double* y) const override;
+protected:
+  const double radius;
+};
+
+struct PurpleDot : public HasRadius {
+  PurpleDot() : HasRadius(Color::PURPLE, 0) { }
 protected:
   void Draw(Cairo::RefPtr<Cairo::Context> cr) const override;
 };
 
-class Arc : public Figure {
+class Arc : public HasRadius {
 public:
-  Arc(Color color, double radius, double sweep_angle,
+  Arc(Color color, double radius, double sweep_angle, double figure_width,
       std::initializer_list<double> dot_angles_asymm)
-  : Figure(color), radius(radius), sweep_angle(sweep_angle) {
+  : HasRadius(color, radius), sweep_angle(sweep_angle) {
     for (const double dot_angle : dot_angles_asymm) {
       dot_angles.insert(-dot_angle);
       dot_angles.insert(dot_angle);
@@ -123,19 +144,21 @@ protected:
   void Draw(Cairo::RefPtr<Cairo::Context> cr) const override;
 private:
   std::set<double> dot_angles;
-  double radius;
   double sweep_angle;
 };
 
 struct BlueArc : public Arc {
   BlueArc()
-  : Arc(Color::BLUE, BLUE_HALF_LENGTH, M_PI, { 0, M_PI_4, M_PI_2 }) { }
+  : Arc(Color::BLUE, BLUE_HALF_LENGTH, M_PI, BLUE_HALF_LENGTH + FIGURE_WIDTH,
+        { 0, M_PI_4, M_PI_2 }) { }
 };
 
 struct GreenArc : public Arc {
   GreenArc()
   : Arc(Color::GREEN,
-        GREEN_ARC_RADIUS, (M_PI - GREEN_ARC_OPEN_HALF_ANGLE) * 2,
+        GREEN_ARC_RADIUS,
+        (M_PI - GREEN_ARC_OPEN_HALF_ANGLE) * 2,
+        GREEN_ARC_RADIUS + FIGURE_WIDTH,
         { 0,
           GREEN_ARC_OPEN_HALF_ANGLE,
           M_PI_2,
@@ -143,11 +166,16 @@ struct GreenArc : public Arc {
 };
 
 struct OrangeArc : public Arc {
-  OrangeArc() : Arc(Color::ORANGE, ORANGE_ARC_RADIUS, M_PI, { M_PI_2 }) { }
+  OrangeArc()
+  : Arc(Color::ORANGE, ORANGE_ARC_RADIUS, M_PI,
+        ORANGE_ARC_RADIUS + FIGURE_WIDTH, { M_PI_2 }) { }
 };
 
-struct PurpleArc : public Figure {
-  PurpleArc() : Figure(Color::PURPLE) { }
+struct PurpleArc : public HasRadius {
+  PurpleArc() : HasRadius(Color::PURPLE, PURPLE_ARC_RADIUS) { }
+  void DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
+                   const Figure* next_figure,
+                   double scale, double* x, double* y) const override;
 protected:
   void Draw(Cairo::RefPtr<Cairo::Context> cr) const override;
 };

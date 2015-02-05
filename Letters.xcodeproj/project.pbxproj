@@ -13,6 +13,7 @@
 		2FE12A9D1A8263790051EFA5 /* libgettextlib-0.19.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FE12A9B1A8263790051EFA5 /* libgettextlib-0.19.4.dylib */; };
 		9209BC581A38366B0038A25C /* colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9209BC571A38366B0038A25C /* colors.cpp */; };
 		920B96391A32FBFA001889F0 /* figures.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 920B96381A32FBFA001889F0 /* figures.cpp */; };
+		929A0FF61A834F870084E280 /* letters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 929A0FF51A834F870084E280 /* letters.cpp */; };
 		92E349FB1A32D86800E80906 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 92E349FA1A32D86800E80906 /* main.cpp */; };
 		92E35DF81A32DFD400E80906 /* libcairo-gobject.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E35DDB1A32DFD400E80906 /* libcairo-gobject.2.dylib */; };
 		92E35DFA1A32DFD400E80906 /* libcairo-script-interpreter.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 92E35DDD1A32DFD400E80906 /* libcairo-script-interpreter.2.dylib */; };
@@ -47,6 +48,7 @@
 		9209BC561A3835AA0038A25C /* colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = colors.h; sourceTree = "<group>"; };
 		9209BC571A38366B0038A25C /* colors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = colors.cpp; sourceTree = "<group>"; };
 		920B96381A32FBFA001889F0 /* figures.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = figures.cpp; sourceTree = "<group>"; };
+		929A0FF51A834F870084E280 /* letters.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = letters.cpp; sourceTree = "<group>"; };
 		92B6A9FA1A7F16F300E0BF0B /* letters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = letters.h; sourceTree = "<group>"; };
 		92B6A9FD1A7F6C4B00E0BF0B /* digits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = digits.h; sourceTree = "<group>"; };
 		92E349F71A32D86800E80906 /* Letters */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Letters; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -117,6 +119,7 @@
 				92E35E171A32EC2C00E80906 /* figures.h */,
 				920B96381A32FBFA001889F0 /* figures.cpp */,
 				92B6A9FA1A7F16F300E0BF0B /* letters.h */,
+				929A0FF51A834F870084E280 /* letters.cpp */,
 				92B6A9FD1A7F6C4B00E0BF0B /* digits.h */,
 			);
 			path = Letters;
@@ -203,6 +206,7 @@
 				9209BC581A38366B0038A25C /* colors.cpp in Sources */,
 				92E349FB1A32D86800E80906 /* main.cpp in Sources */,
 				920B96391A32FBFA001889F0 /* figures.cpp in Sources */,
+				929A0FF61A834F870084E280 /* letters.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +314,7 @@
 					/usr/local/Cellar/gettext/0.19.4/lib,
 				);
 				PRODUCT_NAME = Letters;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -340,6 +345,7 @@
 					/usr/local/Cellar/gettext/0.19.4/lib,
 				);
 				PRODUCT_NAME = Letters;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};

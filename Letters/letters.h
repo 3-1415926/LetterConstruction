@@ -15,15 +15,15 @@ public:
   virtual ~Letter() { }
 
   void Draw(Cairo::RefPtr<Cairo::Surface> surface,
-            double scale, double x, double y) const {
-    for (const OffsetFigure* figure : figures) {
-      figure->Draw(surface, scale, x, y, 0);
-    }
-  }
+            double scale, double x, double y) const;
+
+  void DrawParts(Cairo::RefPtr<Cairo::Surface> surface,
+                 double scale, double x, double y) const;
 protected:
   void AddFigures(std::initializer_list<OffsetFigure*> figures) {
     this->figures.insert(this->figures.end(), figures.begin(), figures.end());
   }
+
 private:
   std::vector<OffsetFigure*> figures;
 };

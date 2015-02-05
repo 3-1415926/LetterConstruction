@@ -11,6 +11,15 @@ void Figure::DrawFigure(Cairo::RefPtr<Cairo::Surface> surface,
   Draw(cr);
 }
 
+void Figure::DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
+                         const Figure* next_figure,
+                         double scale, double* x, double* y) const {
+  if (surface) {
+    DrawFigure(surface, scale, *x, *y, default_angle);
+  }
+  *x += scale * (FIGURE_WIDTH + DEFAULT_STEP);
+}
+
 void Stick::Draw(Cairo::RefPtr<Cairo::Context> cr) const {
   cr->arc(-half_length, 0, END_RADIUS, M_PI_2, M_PI_2 * 3);
   cr->line_to(half_length, -END_RADIUS);
@@ -24,6 +33,26 @@ void Stick::Draw(Cairo::RefPtr<Cairo::Context> cr) const {
     cr->arc(dot, 0, DOT_RADIUS, 0, M_PI * 2);
     cr->stroke();
   }
+}
+
+void HasRadius::DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
+                            const Figure* next_figure,
+                            double scale, double* x, double* y) const {
+  *x += scale * radius;
+  Figure::DrawDefault(surface, next_figure, scale, x, y);
+  const HasRadius* next_has_radius =
+      dynamic_cast<const HasRadius*>(next_figure);
+  if (next_has_radius) {
+    double hypo = next_has_radius->radius + FIGURE_WIDTH + DEFAULT_STEP;
+    double oppo = radius;
+    double adja = sqrt(hypo * hypo - oppo * oppo);
+    *x -= scale * (hypo - adja);
+  }
+}
+
+void PurpleDot::Draw(Cairo::RefPtr<Cairo::Context> cr) const {
+  cr->arc(0, 0, END_RADIUS, 0, M_PI * 2);
+  cr->fill();
 }
 
 void Arc::Draw(Cairo::RefPtr<Cairo::Context> cr) const {
@@ -69,8 +98,9 @@ void PurpleArc::Draw(Cairo::RefPtr<Cairo::Context> cr) const {
   }
 }
 
-void PurpleDot::Draw(Cairo::RefPtr<Cairo::Context> cr) const {
-  cr->arc(0, 0, END_RADIUS, 0, M_PI * 2);
-  cr->fill();
+void PurpleArc::DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
+                            const Figure* next_figure,
+                            double scale, double* x, double* y) const {
+  HasRadius::DrawDefault(surface, next_figure, scale, x, y);
+  *x += scale * PURPLE_ARC_OFFSET;
 }
-

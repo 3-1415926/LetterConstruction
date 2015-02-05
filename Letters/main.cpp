@@ -16,28 +16,36 @@ int main() {
   const double scale = 0.6;
   
   std::vector<Letter*> letters = {
-    new А(), new Б(), new В(), new Г(), new Д(),
-    new Е(), new Ё(), new Ж(), new З(), new И(),
-    new Й(), new К(), new Л(), new М(), new Н(),
-    new О(), new П(), new Р(), new С(), new Т(),
-    new У(), new Ф(), new Х(), new Ц(), new Ч(),
-    new Ш(), new Щ(), new Ъ(), new Ы(), new Ь(),
+    new А(), new Б(), new В(), new Г(), new Д(), new Е(),
+    new Ё(), new Ж(), new З(), new И(), new Й(), new К(),
+    new Л(), new М(), new Н(), new О(), new П(), new Р(),
+    new С(), new Т(), new У(), new Ф(), new Х(), new Ц(),
+    new Ч(), new Ш(), new Щ(), new Ъ(), new Ы(), new Ь(),
     new Э(), new Ю(), new Я(),
   };
   
-  std::string filename = "image.pdf";
+  std::string filename = "letters.pdf";
   Cairo::RefPtr<Cairo::PdfSurface> surface =
     Cairo::PdfSurface::create(filename, width, height);
 
   auto letter = letters.begin();
   const int rows = 3;
-  const int columns = 2;
   while (letter != letters.end()) {
     for (int i = 0; i < rows && letter != letters.end(); ++i) {
-      for (int j = 0; j < columns && letter != letters.end(); ++j, ++letter) {
-        (*letter)->Draw(surface, scale,
-          width * (j + 0.5) / columns, height * (i + 0.5) / rows);
+      (*letter)->Draw(surface, scale,
+          width / 4, height * (i + 0.5) / rows);
+      (*letter)->DrawParts(surface, scale,
+          3 * width / 4, height * (i + 0.5) / rows);
+      if (i > 0) {
+        auto cr = Cairo::Context::create(surface);
+        cr->set_source_rgb(0.5, 0.5, 0.5);
+        cr->set_line_width(LINE_WIDTH);
+        cr->move_to(0, height * i / rows);
+        cr->line_to(width, height * i / rows);
+        cr->set_dash(std::vector<double>({ 1 }), 0);
+        cr->stroke();
       }
+      ++letter;
     }
     surface->show_page();
   }
