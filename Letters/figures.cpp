@@ -44,7 +44,7 @@ void HasRadius::DrawDefault(Cairo::RefPtr<Cairo::Surface> surface,
       dynamic_cast<const HasRadius*>(next_figure);
   if (next_has_radius) {
     double hypo = next_has_radius->radius + FIGURE_WIDTH + DEFAULT_STEP;
-    double oppo = radius;
+    double oppo = radius; // FIXME: this is less for GreenArc
     double adja = sqrt(hypo * hypo - oppo * oppo);
     *x -= scale * (hypo - adja);
   }

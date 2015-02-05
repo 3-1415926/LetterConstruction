@@ -22,6 +22,8 @@ int main() {
     new С(), new Т(), new У(), new Ф(), new Х(), new Ц(),
     new Ч(), new Ш(), new Щ(), new Ъ(), new Ы(), new Ь(),
     new Э(), new Ю(), new Я(),
+    new One(), new Two(), new Three(), new Four(), new Five(),
+    new Six(), new Seven(), new Eight(), new Nine(), new Zero(),
   };
   
   std::string filename = "letters.pdf";
