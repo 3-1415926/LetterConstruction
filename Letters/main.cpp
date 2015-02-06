@@ -27,7 +27,7 @@ int main() {
     new Six(), new Seven(), new Eight(), new Nine(), new Zero(),
   };
   
-  std::string filename = "letters.pdf";
+  std::string filename = "letters-generated.pdf";
   Cairo::RefPtr<Cairo::PdfSurface> surface =
     Cairo::PdfSurface::create(filename, width, height);
 

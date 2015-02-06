@@ -80,8 +80,6 @@ struct BottomStick : public virtual Letter {
 
 struct Г : public virtual LeftStick, public virtual TopStick { };
 
-struct Т : public virtual VerticalStick, public virtual TopStick { };
-
 struct Н : public virtual LeftStick, public virtual RightStick,
     public virtual HorizontalStick { };
 
@@ -267,12 +265,21 @@ struct С : public virtual Letter {
   }
 };
 
+struct Т : public virtual VerticalStick {
+  Т() {
+    AddFigures({
+      new OffsetFigure(new GreenStick(), 0, -BLUE_HALF_LENGTH, 0),
+    });
+  }
+};
+
 struct У : public virtual Letter {
   У() {
     AddFigures({
-      new OffsetFigure(new OrangeStick(), -ORANGE_STEP * cos(leg_angle),
-        -ORANGE_STEP * sin(leg_angle), leg_angle),
-      new OffsetFigure(new BlueStick(), 0, 0, -leg_angle),
+        new OffsetFigure(new GreenStick(), -GREEN_STEP * cos(leg_angle),
+            (BLUE_SMALL_STEP - GREEN_STEP) * sin(leg_angle), leg_angle),
+        new OffsetFigure(new BlueStick(),
+            BLUE_SMALL_STEP * cos(leg_angle), 0, -leg_angle),
     });
   }
 protected:
@@ -351,10 +358,12 @@ struct Ы : public virtual Letter {
   }
 };
 
-struct Э : public virtual HorizontalStick {
+struct Э : public virtual Letter {
   Э() {
     AddFigures({
-      new OffsetFigure(new BlueArc(), -ORANGE_STEP, 0, M_PI),
+      new OffsetFigure(new BlueArc(), 0, 0, -3 * M_PI / 4),
+      new OffsetFigure(new BlueArc(), 0, 0, 3 * M_PI / 4),
+      new OffsetFigure(new OrangeStick(), ORANGE_STEP, 0, 0),
     });
   }
 };
